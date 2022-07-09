@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 08, 2022 at 02:01 PM
+-- Generation Time: Jul 09, 2022 at 01:16 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -170,6 +170,50 @@ INSERT INTO `ordering` (`order_id`, `order_date`, `shipping_date`, `delivery_dat
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `payment`
+--
+
+CREATE TABLE `payment` (
+  `payment_id` int(11) NOT NULL,
+  `fk_type_id` int(11) NOT NULL,
+  `fk_customer_id` int(11) NOT NULL,
+  `card_nr` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `payment`
+--
+
+INSERT INTO `payment` (`payment_id`, `fk_type_id`, `fk_customer_id`, `card_nr`) VALUES
+(1, 2, 3, 12345),
+(2, 3, 2, 54321),
+(3, 1, 4, 11111),
+(4, 4, 1, 123321);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_type`
+--
+
+CREATE TABLE `payment_type` (
+  `type_id` int(10) NOT NULL,
+  `payment_type` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `payment_type`
+--
+
+INSERT INTO `payment_type` (`type_id`, `payment_type`) VALUES
+(1, 'Debit Card'),
+(2, 'Credit Card'),
+(3, 'Sofort'),
+(4, 'Klarna');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `product`
 --
 
@@ -305,6 +349,20 @@ ALTER TABLE `ordering`
   ADD KEY `fk_shipping_id` (`fk_shipping_id`);
 
 --
+-- Indexes for table `payment`
+--
+ALTER TABLE `payment`
+  ADD PRIMARY KEY (`payment_id`),
+  ADD KEY `fk_type_id` (`fk_type_id`),
+  ADD KEY `fk_customer_id` (`fk_customer_id`);
+
+--
+-- Indexes for table `payment_type`
+--
+ALTER TABLE `payment_type`
+  ADD PRIMARY KEY (`type_id`);
+
+--
 -- Indexes for table `product`
 --
 ALTER TABLE `product`
@@ -365,6 +423,18 @@ ALTER TABLE `ordering`
   MODIFY `order_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `payment`
+--
+ALTER TABLE `payment`
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `payment_type`
+--
+ALTER TABLE `payment_type`
+  MODIFY `type_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
@@ -420,6 +490,13 @@ ALTER TABLE `famazon`
 --
 ALTER TABLE `ordering`
   ADD CONSTRAINT `ordering_ibfk_1` FOREIGN KEY (`fk_shipping_id`) REFERENCES `shiping` (`shipping_id`);
+
+--
+-- Constraints for table `payment`
+--
+ALTER TABLE `payment`
+  ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`fk_type_id`) REFERENCES `payment_type` (`type_id`),
+  ADD CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`fk_customer_id`) REFERENCES `customer` (`customer_id`);
 
 --
 -- Constraints for table `product`
